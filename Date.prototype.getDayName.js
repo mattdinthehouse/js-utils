@@ -1,12 +1,12 @@
 Date.prototype.getDayName = function() {
   var days = [
+    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday',
-    'Sunday'
+    'Saturday'
   ];
 
   return days[this.getDay()];
