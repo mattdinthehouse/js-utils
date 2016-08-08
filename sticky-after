@@ -1,0 +1,40 @@
+*** JS
+$(document).scroll(function() {
+	var headerHeight = $('.header').height() + $('#subtitle').height();
+  $('.sticky-after').each(function(_, element) {
+		element = $(element);
+		if($(document).scrollTop() + headerHeight >= element.offset().top && !element.hasClass('floating')) {
+			element.prop('startOffset', element.offset().top);
+			element.addClass('floating');
+		}
+		else if(element.prop('startOffset') !== undefined && $(document).scrollTop() + headerHeight < element.prop('startOffset') && element.hasClass('floating')) {
+			element.prop('startoffset', undefined);
+			element.removeClass('floating');
+			element.css('top', 'auto');
+		}
+	});
+
+	$('.sticky-after.floating').css('top', headerHeight+'px');
+});
+
+*** SASS
+.sticky-after {
+	position:relative;
+	z-index:2;
+
+	&.floating {
+		position:fixed;
+		left:0px;
+		z-index:1;
+	}
+}
+
+.sticky-after:not(.floating) ~ .sticky-after-spacer {
+	display:none;
+}
+
+*** HTML
+<div class="col-xs-12 col-md-3 sticky-after">
+	<!-- content -->
+</div>
+<div class="sticky-after-spacer col-xs-12 col-md-3"></div>
