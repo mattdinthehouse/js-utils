@@ -1,0 +1,61 @@
+*** JS
+*** Depends on jquery.matchheights.js
+$('.fade-between').each(function(_, fadeContainer) {
+    fadeContainer = $(fadeContainer);
+
+		// Add matchheights stuff
+		fadeContainer.attr('data-matchheights', '.fade-between-spacer');
+		fadeContainer.append('<div class=\"fade-between-spacer\"></div>');
+		fadeContainer.find('.fade-between-elements > *').each(function(_, element) {
+			$(element).addClass('fade-between-spacer');
+		});
+
+		// Start animating
+		setInterval(function(container) {
+			var options = container.find(".fade-between-elements > *");
+			
+			var currentOptionIndex = undefined;
+			for(var i = 0; i < options.length && currentOptionIndex === undefined; i++) {
+				var option = $(options[i]);
+				if(option.css('opacity') === '1') {
+					option.css('opacity', '0');
+					currentOptionIndex = i;
+				}
+			}
+
+			if(currentOptionIndex !== undefined) {
+				var newOptionIndex = currentOptionIndex + 1;
+				if(newOptionIndex >= options.length)
+					newOptionIndex = 0;
+
+				$(options[newOptionIndex]).css('opacity', '1');
+			}
+		}, 5000, fadeContainer);
+
+		// Run matchheights
+		matchheights();
+	});
+
+*** SASS
+.fade-between {
+	position:relative;
+	overflow:hidden;
+
+	.fade-between-elements > * {
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		@include transition(opacity 3s ease);
+	}
+}
+
+** HTML
+<div class="fade-between">
+	<div class="fade-between-elements">
+		<img src="<?php ImageDir(); ?>/home-peter-grant.jpg"/>
+		<img src="<?php ImageDir(); ?>/home-person-2.jpg"/>
+		<img src="<?php ImageDir(); ?>/home-person-3.jpg"/>
+	</div>
+</div>
