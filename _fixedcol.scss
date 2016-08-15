@@ -1,0 +1,22 @@
+@mixin make-fixed-col($size, $width) {
+	.col-#{$size}-#{$width} {
+		float:left;
+		width:#{$width}px;
+	}
+}
+
+@mixin fixed-col($width) {
+	@include make-fixed-col(xs, $width);
+
+	@media screen and (min-width:768px) {
+		@include make-fixed-col(sm, $width);
+	}
+
+	@media screen and (min-width:992px) {
+		@include make-fixed-col(md, $width);
+	}
+
+	@media screen and (min-width:1200px) {
+		@include make-fixed-col(lg, $width);
+	}
+}
