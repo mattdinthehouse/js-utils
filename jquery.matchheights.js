@@ -20,11 +20,8 @@ function matchheights(container) {
 		if(elements.length < 1)
 			return;
 
-		// Get the subset list of elements to apply height changes to
-		var affectedElements = elements.filter(':not([data-matchheights-noapply])');
-
 		// Reset the heights of everything
-		affectedElements.css('height', 'auto');
+		elements.filter(':not([data-matchheights-noreset])').css('height', 'auto');
 
 		if(container.attr('data-matchheights-mediaquery') !== undefined) {
 			if(!window.matchMedia(container.attr('data-matchheights-mediaquery')).matches) {
@@ -45,7 +42,7 @@ function matchheights(container) {
 		});
 
 		// Apply the height
-		affectedElements.css('height', maxHeight+'px');
+		elements.filter(':not([data-matchheights-noapply])').css('height', maxHeight+'px');
 	}
 }
 jQuery(window).load(function(event) {
