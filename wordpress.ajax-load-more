@@ -1,0 +1,54 @@
+*** IN TEMPLATE FILE ***
+<script type="text/javascript">
+	var page = <?php print $page; // Wordpress's variable ?>;
+
+	$('.blog-loadmore a').click(function(event) {
+		$.ajax({
+			type: 'POST',
+			url: '<?php print admin_url('admin-ajax.php'); ?>',
+			data: {
+				paged: ++page,
+				query_vars: <?php print json_encode($wp_query->query); ?>,
+				action: 'more_post_ajax',
+			},
+		})
+		.done(function(data) {
+			if(data == 'NO') {
+				// No more posts
+				$('.blog-loadmore').remove();
+			}
+			else {
+				$('.blog-posts').append(data);
+			}
+		});
+
+		event.preventDefault();
+		return false;
+	});
+</script>
+
+
+*** IN FUNCTIONS.PHP ***
+function more_post_ajax(){
+  $query_vars = (isset($_POST['query_vars']) ? $_POST['query_vars'] : array());
+  if(isset($_POST['paged']))
+    $query_vars['paged'] = $_POST['paged'];
+
+  $query = new WP_Query($query_vars);
+
+  if($query->have_posts()) {
+    while($query->have_posts()) {
+      $query->the_post();
+      include locate_template('partials/blogarchivepost.php');
+    }
+  }
+  else {
+    print 'NO';
+  }
+
+  wp_reset_postdata();
+  die();
+}
+
+add_action('wp_ajax_nopriv_more_post_ajax', 'more_post_ajax');
+add_action('wp_ajax_more_post_ajax', 'more_post_ajax');
